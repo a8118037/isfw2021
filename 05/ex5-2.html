@@ -22,6 +22,9 @@
             var objects = await osql.connect(sql);
             console.log(objects);
 
+            document.getElementById('tf1').value = '名無し'
+            document.getElementById('tf2').value = ''
+
             document.getElementById('result').innerHTML = "tweetしました";
         }
     </script>
