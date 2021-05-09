@@ -10,16 +10,16 @@
     <script type="text/javascript" src="../osql.js"></script>
 
     <script>
+        $().ready(function () {
+            var sql = 'select * from Tweets order by time desc limit 20';
+            showTable(sql);
+        });
+
         function searchButtonPressed() {
             var target = document.getElementById('search_box')
             var key = target.value
             var sql = 'select * from Tweets WHERE tweet LIKE "%' + key + '" order by time desc limit 20';
             intervalProccessSql = sql
-            showTable(sql);
-        }
-
-        function button1Pressed() {
-            var sql = 'select * from Tweets order by time desc limit 20';
             showTable(sql);
         }
 
@@ -74,7 +74,6 @@
     <p id="insert_result"></p>
 
     <hr>
-    <button onclick="button1Pressed()">X</button>
     <input type="text" id="search_box" name="query" size="40">
     <button onclick="searchButtonPressed()">検索</button>
     <p id="select_result">xxxx</p>
