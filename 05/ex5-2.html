@@ -10,10 +10,17 @@
     <script type="text/javascript" src="../osql.js"></script>
 
     <script>
+        var intervalProccessSql = 'select * from Tweets order by time desc limit 20';
+
         $().ready(function () {
             var sql = 'select * from Tweets order by time desc limit 20';
             showTable(sql);
+            setInterval(intervalProccess, 2000)
         });
+
+        function intervalProccess() {
+            showTable(intervalProccessSql);
+        }
 
         function searchButtonPressed() {
             var target = document.getElementById('search_box')
