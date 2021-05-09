@@ -11,11 +11,19 @@
 
     <script>
         function button1Pressed() {
-            doSelect();
+            var sql = 'select * from Tweets order by time desc limit 20';
+            showItemization(sql);
         }
 
-        async function doSelect() {
-            var sql = 'select * from Tweets order by time desc limit 20';
+        function searchButtonPressed() {
+            var target = document.getElementById('search_box')
+            var key = target.value
+            var sql = 'select * from Tweets WHERE tweet LIKE "%' + key + '" order by time desc limit 20';
+            showItemization(sql);
+        }
+
+        // select文の結果を箇条書き形式で表示する関数
+        async function showItemization(sql) {
             var objects = await osql.connect(sql);
             console.log(objects);
             var html = '';
@@ -35,6 +43,8 @@
     <h1>Tweets</h1>
     <button onclick="button1Pressed()">X</button>
     <hr>
+    <input type="text" id="search_box" name="query" size="40">
+    <button onclick="searchButtonPressed()">検索</button>
     <p id="result">xxxx</p>
 </body>
 
