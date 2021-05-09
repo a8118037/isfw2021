@@ -12,14 +12,14 @@
     <script>
         function button1Pressed() {
             var sql = 'select * from Tweets order by time desc limit 20';
-            showItemization(sql);
+            showTable(sql);
         }
 
         function searchButtonPressed() {
             var target = document.getElementById('search_box')
             var key = target.value
             var sql = 'select * from Tweets WHERE tweet LIKE "%' + key + '" order by time desc limit 20';
-            showItemization(sql);
+            showTable(sql);
         }
 
         // select文の結果を箇条書き形式で表示する関数
@@ -35,6 +35,25 @@
             html = html + '</ul>';
             document.getElementById('result').innerHTML = html;
         }
+
+        // select文の結果を表形式で表示する関数
+        async function showTable(sql) {
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            var html = '';
+            html = html + '<table border="1">';
+            html = html + '<th>Name</th><th>Tweet</th>'
+            for (var i = 0; i < objects.length; i++) {
+                var object = objects[i];
+                html = html + '<tr>';
+                html = html + '<td>' + object.name + '</td>';
+                html = html + '<td>' + object.tweet + '</td>';
+                html = html + '</tr>';
+            }
+            html = html + '</table>';
+            document.getElementById('result').innerHTML = html;
+        }
+
     </script>
 
 </head>
