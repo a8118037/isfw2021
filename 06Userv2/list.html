@@ -26,10 +26,23 @@
                 html = html + '<td>' + object.id + '</td>';
                 html = html + '<td>' + object.name + '</td>';
                 html = html + '<td>' + '<a href="update.html?userid=' + object.id + '">変更</a>' + '</td>';
+                html = html + `<td><input type="button" id=${object.id} value="削除" onclick="deleteUser(this.id)"></td>`;
                 html = html + '</tr>';
             }
             html = html + '</table>';
             document.getElementById('result').innerHTML = html;
+        }
+
+        function deleteUser(userid) {
+            var alert_msg = `本当に${userid}を削除していいですか?`
+            alert(alert_msg);
+            execDelete(userid);
+        }
+
+        async function execDelete(userid) {
+            var sql = `delete from Users where id="${userid}";`;
+            console.log(sql)
+            var objects = await osql.connect(sql);
         }
     </script>
 
