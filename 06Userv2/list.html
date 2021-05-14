@@ -34,9 +34,12 @@
         }
 
         function deleteUser(userid) {
-            var alert_msg = `本当に${userid}を削除していいですか?`
-            alert(alert_msg);
-            execDelete(userid);
+            var msg = `本当に${userid}を削除していいですか?`
+            result = confirm(msg);
+            if (result) {
+                execDelete(userid);
+                execSelect();
+            }
         }
 
         async function execDelete(userid) {
