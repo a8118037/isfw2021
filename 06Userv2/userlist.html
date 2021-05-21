@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="../jquery.min.js"></script>
+    <script type="text/javascript" src="../settings.js"></script>
+    <script type="text/javascript" src="../osql.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            execSelect();
+        });
+
+        async function execSelect() {
+            var sql = 'select * from Users';
+            var objects = await osql.connect(sql);
+            console.log(objects);
+
+            var loginUserId = sessionStorage.getItem('userid');
+            var sql = `select * from Follows where fromid="${loginUserId}";`;
+            var followsObjects = await osql.connect(sql);
+            console.log(followsObjects);
+
+            var followUserIdList = [];
+            for (var i = 0; i < followsObjects.length; i++) {
+                followUserIdList.push(followsObjects[i].toid)
+            }
+
+            var html = '';
+            html = html + '<table border="1">';
+            for (var i = 0; i < objects.length; i++) {
+                html = html + '<tr>';
+                var object = objects[i];
+                html = html + '<td>' + object.id + '</td>';
+                html = html + '<td>' + object.name + '</td>';
+                if (followUserIdList.includes(object.id)) {
+                    html = html + `<td><input type="button" id=${object.id} value="unfollow" onclick="unfollowUser(this.id)"></td>`;
+                } else {
+                    html = html + `<td><input type="button" id=${object.id} value="follow" onclick="followUser(this.id)"></td>`;
+                }
+                html = html + '</tr>';
+            }
+            html = html + '</table>';
+            document.getElementById('result').innerHTML = html;
+        }
+
+        async function followUser(followedUserId) {
+            var loginUserId = sessionStorage.getItem('userid');
+            var sql = `insert into Follows (fromid, toid) values("${loginUserId}", "${followedUserId}");`;
+            console.log(sql)
+            var objects = await osql.connect(sql);
+            execSelect();
+        }
+
+        async function unfollowUser(followedUserId) {
+            var loginUserId = sessionStorage.getItem('userid');
+            var sql = `delete from Follows where fromid="${loginUserId}" and toid="${followedUserId}";`;
+            console.log(sql)
+            var objects = await osql.connect(sql);
+            execSelect();
+        }
+    </script>
+
+</head>
+
+<body>
+    <h1>Users</h1>
+    <p id="result">xxxx</p>
+</body>
+
+</html>
